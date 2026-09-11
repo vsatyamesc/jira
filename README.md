@@ -36,13 +36,22 @@
 
 ## 🚀 Getting Started
 
-### Launching the Application
-The server is currently running in the background at:
+### Launching with Docker Compose (Recommended for Containerization)
+```bash
+docker compose up -d --build
 ```
-http://127.0.0.1:8000
+The app will build the Vite React frontend and FastAPI backend into a single container and launch at:
+```
+http://localhost:8000
+```
+Database data is automatically persisted in `./data/chronojira.db`.
+
+To stop the container:
+```bash
+docker compose down
 ```
 
-To run manually or restart at any time:
+### Launching Directly on Windows
 ```bash
 run.bat
 ```
@@ -54,23 +63,19 @@ python -m uvicorn main:app --host 127.0.0.1 --port 8000 --reload
 ---
 
 ## 📁 Project Structure
-
+ 
 ```
 jira-alt/
+├── backend/               # Modular FastAPI Python backend (routers, schemas, services)
+├── frontend/              # Modern Apple-inspired React SPA (Vite, CSS design tokens)
+│   ├── dist/              # Production web bundle compiled by Vite
+│   └── src/               # React components, modals, and time utilities
+├── Dockerfile             # Multi-stage Docker build (Node.js builder -> Python runtime)
+├── docker-compose.yml     # Container orchestration with volume persistence
+├── requirements.txt       # Python backend dependencies
 ├── chronojira.db          # Persistent SQLite database
-├── database.py            # SQLite schema, tables, and seed data generator
-├── main.py                # FastAPI server (REST APIs, collision detection, CSV export)
-├── run.bat                # One-click Windows launch script
-├── test_api.py            # Automated verification test suite
-└── static/
-    ├── index.html         # Single-page application shell
-    ├── css/
-    │   └── style.css      # Dark-mode design system & custom time-slot styles
-    └── js/
-        ├── api.js         # REST client
-        ├── app.js         # Main coordinator, modals & collision previews
-        ├── kanban.js      # Drag-and-drop Kanban board
-        ├── schedule.js    # Visual Day & Week time-slot calendar
-        ├── timesheet.js   # Excel matrix view with daily aggregates
-        └── analytics.js   # Story Points velocity & burn-up breakdown
+├── database.py            # SQLite connection, schema migrations, and helpers
+├── main.py                # FastAPI server entry point (serves API and React SPA)
+├── run.bat                # Windows launch script
+└── test_api.py            # Automated API verification test suite
 ```
